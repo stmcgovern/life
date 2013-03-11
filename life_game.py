@@ -1,52 +1,87 @@
 #reproduce Conway's game of Life
-#have a nxn board (say n=10), each cell can be 0 or 1 (dead or alive)
-#-> seed the board in some way (e.g. random , determinate patterns, etc.)
-#->update function which follows the set of rules
-#---rules:(from wikipedia.org)
-#-----1.Any live cell with fewer than two live neighbours dies, as if caused by under-population.
-#-----2.Any live cell with two or three live neighbours lives on to the next generation.
-#-----3.Any live cell with more than three live neighbours dies, as if by overcrowding.
-#-----4.Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
 
-#update is applied uniformly to the board at one time step.
-
-#strategy: nxn array, "current", and a copy of it. update function is applied to each cell of current board and the copy is modified to reflect the "tick", ie the time step
 
 import numpy as np
 import random as r
-
+#magic number of grid size
 n_size =10
+time_steps=10
+
+#TODO 
+#sort out the boundary cases. (e.g. wrap, permanent dead edges)
+#integrate all 4 rules (now last one is ad hoc)- inefficient!
+#have program run in interpreter, with command to time step incrementally
+
+
+def main(time_steps):
+	grid=init()
+	seed(grid, 60)#magic number of initial alive cells
+	print grid
+
+	for i in xrange(time_steps):
+		next_grid=Update(grid)
+		print next_grid
+		grid=next_grid
+
+		
+	print "Game OVER"
+
+
+
 
 #initialize the grid / all 0s
-def init(n_size):
-	#n_size=10
+def init():
+	
 	grid = np.zeros(shape=(n_size,n_size),dtype=np.int)
 	return grid
 
 #turn  a number <grains> of  cells to be alive, randomly chosen
 def seed(grid, grains):
 	for x in xrange(grains):
-		row=r.randint(1,8)
-		col=r.randint(1,8)
+		row=r.randint(1,n_size-2) # ad hoc -leave edges dead during seeding
+		col=r.randint(1,n_size-2)
 		grid[row][col]=1
-
-#for each cell in the grid, the 4 rules (As above) are applied in order
-
-#def neighbors(grid, live):
-#	for cell in live:
-
-
 
 
 #SKETCH
-# def Update(grid): # takes in current grid and returns an updated one
+# def Update(grid): # takes in current grid and returns next_grid
 # 	live=get_live(grid)
 # 	
-	#for item in live:
-# 		neighbors=get_neighbors(item)
-# 		alive_neighbors=get_alive_neighbors(neighbors, grid)
-# 		if alive_neighbors == case 1:
-# 			next_grid[item]=1 or 0
+	#for cell in live:
+# 		neighbors=get_neighbors(grid, cell)
+# 		alive_neighbors=sum_neighbors(neighbors, grid)
+# 		evolution returns 0 or 1 to next_grid for the cell in question
+#		
+
+def Update(grid):
+
+	next_grid=init()
+
+	live = get_live(grid)
+
+	for cell in live: 
+		neighbors = get_neighbors(grid, cell)
+		alive_neighbors=sum_neighbors(grid, neighbors)
+		i,j=cell
+		next_grid[i][j]=evolution(alive_neighbors)
+
+	#implement the 4th rule, concerning dead cells with 3 alive neighbors
+	for row in xrange(n_size):
+		for col in xrange(n_size):
+			
+			status=grid[row][col]
+			cell = (row,col)
+			neighbors = get_neighbors(grid, cell)
+			if cell ==1:
+				pass #do rules 1-3
+			elif cell==0:
+				alive_neighbors = sum_neighbors(grid, neighbors)
+				if alive_neighbors==3:
+					next_grid[row][col]=1
+
+	return next_grid
+
+
 
 def get_live(grid):
 	live=[]
@@ -98,38 +133,24 @@ def evolution(alive_neighbors): #return 0 or 1 based on rules
 		return 0
 
 
-def Update(grid):
-	next_grid=init(n_size)
-	#first get live cells
-	live = get_live(grid)
-	for cell in live: 
-		neighbors = get_neighbors(grid, cell)
-		alive_neighbors=sum_neighbors(grid, neighbors)
-		i,j=cell
-		next_grid[i][j]=evolution(alive_neighbors)
-
-	#do something about 4th rule
-
-	return next_grid
 
 
 
 
-def main(n_size, time_steps):
-
-	grid=init(n_size)
-	seed(grid, 40)
-	print grid
-
-	for i in xrange(time_steps):
-		next_grid=Update(grid)
-		print next_grid
-
-		
-	print "Game OVER"
 
 
 
+# RUNNING THE DARN THING
+
+main(time_steps)
+
+
+
+
+
+
+
+#SCRAP
 
 
 
