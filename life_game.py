@@ -2,13 +2,17 @@
 
 import numpy as np
 import random as r
-#magic number of grid size
-n_size =10
-time_steps=20
 
-def main(time_steps):
+#TODO:pass as parameters
+n_size =25
+time_steps=100
+initial_density = 0.8
+
+
+
+def main():
 	grid=init()
-	seed(grid, 60)#magic number of initial alive cells ->cf.seeding config
+	seed(grid, initial_density)
 	print grid
 
 	for i in xrange(time_steps):
@@ -26,10 +30,11 @@ def init():
 	grid = np.zeros(shape=(n_size,n_size),dtype=np.int)
 	return grid
 
-#turn  a number <grains> of  cells to be alive, randomly chosen
-def seed(grid, grains):
+# shoots for initial density (not guaranteed since random might repeat)
+def seed(grid, initial_density):
+	grains=int(initial_density*(n_size*n_size))
 	for x in xrange(grains):
-		row=r.randint(1,n_size-2) # ad hoc -leave edges dead during seeding
+		row=r.randint(1,n_size-2) #leaves edges at 0 during seeding
 		col=r.randint(1,n_size-2)
 		grid[row][col]=1
 
@@ -101,5 +106,5 @@ def evolution_1(alive_neighbors): #return 0 or 1 based on rules for alive cell
 
 # RUNNING THE DARN THING
 
-main(time_steps)
+main()
 
