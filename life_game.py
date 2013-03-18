@@ -22,10 +22,10 @@ else:
 
 
 class Board(object):
-	def __init__(self, size, attr2, attr3):
+	def __init__(self, size, time_steps, initial_density):
 		self.size=size
-		self.time_steps=attr2
-		self.initial_density =attr3
+		self.time_steps=time_steps
+		self.initial_density =initial_density
  		
  		#self.grid = [[0]*size]*size#np.zeros(shape=(n_size,n_size),dtype=np.int)
  		self.grid = [[0 for i in range(self.size)] for j in range(self.size)]
@@ -55,6 +55,9 @@ class Board(object):
 					next_grid[row][col]=self.evolution_0(alive_neighbors)
 				else:
 					next_grid[row][col]=self.evolution_1(alive_neighbors)
+
+		
+
 
 		self.grid=next_grid
 
@@ -114,7 +117,14 @@ class Board(object):
 		else:
 			return 0
 
+	
 
+	def display(self):
+		pprint(self.grid)
+	
+	def go(self):
+		self.update()
+		self.display()
 
 def main():
 	
@@ -126,6 +136,7 @@ def main():
 		board.update()
 		pprint(board.grid)
 		print "tick"
+
 
 		
 	print "Game OVER"
