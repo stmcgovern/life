@@ -48,12 +48,7 @@ class Board(object):
 			for col in xrange(self.size):
 				
 				cell = (row,col)
-				#border cases
-				if row==0 or col==0 or row==self.size-1 or col ==self.size-1:
-					neighbors = self.get_neighbors_wrap(cell)
-				else:
-					neighbors = self.get_neighbors(cell)
-				
+				neighbors = self.get_neighbors(cell)
 				alive_neighbors=self.sum_neighbors(neighbors)
 				
 				if(self.grid[row][col]==0):
@@ -63,11 +58,8 @@ class Board(object):
 
 		self.grid=next_grid
 
-	def get_neighbors_wrap(self, cell):
-		#this defines the neighbors for the border
-		#1. corners
-		#2. top/bottom
-		#3. sides
+	def get_neighbors(self, cell):
+		#wraps around if at the border
 		far =self.size-1
 		neighbors=[]
 		i,j=cell
@@ -94,23 +86,6 @@ class Board(object):
 		neighbors.append((down,j))
 		neighbors.append((down,right))
 
-		return neighbors
-
-	def get_neighbors(self, cell):
-		neighbors=[]
-		i,j=cell
-		#print "i,j", i,j
-		neighbors.append((i-1,j-1))
-		neighbors.append((i-1,j))
-		neighbors.append((i-1,j+1))
-		neighbors.append((i,j-1))
-		neighbors.append((i,j+1))
-		neighbors.append((i+1,j-1))
-		neighbors.append((i+1,j))
-		neighbors.append((i+1,j+1))
-		#print "index", index
-		#print "cell", live[index]
-		#print "neighbors", neighbors
 		return neighbors
 
 	def sum_neighbors(self, neighbors):
