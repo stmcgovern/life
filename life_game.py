@@ -29,33 +29,72 @@ class Board(object):
  		
  		#self.grid = [[0]*size]*size#np.zeros(shape=(n_size,n_size),dtype=np.int)
  		self.grid = [[0 for i in range(self.size)] for j in range(self.size)]
- 		pprint(self.grid)
+ 		#pprint(self.grid)
  		grains=int(self.initial_density*(self.size*self.size))
 		for x in xrange(grains):
-			row=randint(1,self.size-2) #leaves edges at 0 during seeding
-			col=randint(1,self.size-2)
+			row=randint(0,self.size-1) 
+			col=randint(0,self.size-1)
 			self.grid[row][col]=1
 			#pdb.set_trace()
+
+
 
 	def update(self):
 
 		next_grid=[[0 for i in range(self.size)] for j in range(self.size)]
-	#just scan through the whole thing
-		for row in xrange(1,self.size-1):
-			for col in xrange(1,self.size-1):
+	
+		#just scan through the whole thing
+		for row in xrange(self.size):
+			for col in xrange(self.size):
 				
 				cell = (row,col)
-				neighbors = self.get_neighbors(cell)
-				alive_neighbors=self.sum_neighbors(neighbors)
-				i,j=cell
-				if(self.grid[i][j]==0):
-					next_grid[i][j]=self.evolution_0(alive_neighbors)
+				#border cases
+				if row==0 or col==0 or row==self.size-1 or col ==self.size-1:
+					neighbors = self.get_neighbors_wrap(cell)
 				else:
-					next_grid[i][j]=self.evolution_1(alive_neighbors)
+					neighbors = self.get_neighbors(cell)
+				
+				alive_neighbors=self.sum_neighbors(neighbors)
+				
+				if(self.grid[row][col]==0):
+					next_grid[row][col]=self.evolution_0(alive_neighbors)
+				else:
+					next_grid[row][col]=self.evolution_1(alive_neighbors)
 
-		#pprint(next_grid)
-		#print "kjldsfajklfdsaj;fad"
 		self.grid=next_grid
+
+	def get_neighbors_wrap(self, cell):
+		#this defines the neighbors for the border
+		#1. corners
+		#2. top/bottom
+		#3. sides
+		far =self.size-1
+		neighbors=[]
+		i,j=cell
+		up=i-1
+		down=i+1
+		left=j-1
+		right=j+1
+		
+		if(i==0):
+			up=far
+		if(i==far):
+			down=0
+		if(j==0):
+			left=far
+		if(j==far):
+			right=0
+
+		neighbors.append((up,left))
+		neighbors.append((up,j))
+		neighbors.append((up,right))
+		neighbors.append((i,left))
+		neighbors.append((i,right))
+		neighbors.append((down,left))
+		neighbors.append((down,j))
+		neighbors.append((down,right))
+
+		return neighbors
 
 	def get_neighbors(self, cell):
 		neighbors=[]
@@ -107,10 +146,11 @@ def main():
 	board=Board(n_size, time_steps, initial_density)
 
 	pprint(board.grid)
-
+	print "go!"
 	for i in xrange(time_steps):
 		board.update()
 		pprint(board.grid)
+		print "tick"
 
 		
 	print "Game OVER"
