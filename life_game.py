@@ -58,6 +58,15 @@ class Board(object):
 
 		
 
+			# if(mutate==True):
+			# #probability that a dead cell animates
+			# 	if(randint(0,100)<50):
+			# 		row=randint(0,self.size-1) 
+			# 		col=randint(0,self.size-1)
+			# 		self.grid[row][col]=1
+				
+
+
 
 		self.grid=next_grid
 
