@@ -19,6 +19,7 @@ class GameBoard(tk.Frame):
 		                        width=canvas_width, height=canvas_height, background="bisque")
 		self.canvas.pack(side="top", fill="both", expand=True, padx=2, pady=2)
 		self.go = tk.Button(self, text="Go", command=self.draw)
+        
         # this binding will cause a refresh if the user interactively
         # changes the window size
         #self.canvas.bind("<Configure>", self.refresh)
@@ -89,7 +90,7 @@ if __name__ == "__main__":
 	# Draw(C, thing)
 	# C.bind("<Key>", key)
 	# C.pack()
-	
+	print "WOOHOO"
 
 
 	root.mainloop()
