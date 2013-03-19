@@ -66,37 +66,34 @@ class GameBoard(tk.Frame):
 
 if __name__ == "__main__":
     
+	board = [ [None]*10 for _ in range(10) ]
 
-	life_grid=lg.Board(10,1,0.6)
+	life=lg.Board(10,1,0.6)
 	root = tk.Tk()
-
-	board = GameBoard(root)
-	board.draw(life_grid)
-		#life_grid.update()
-	board.change_color(life_grid)
-	#board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
-
-	# life_grid.update()
-	# board.draw(life_grid)
-
-	board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
-
-
-	# C = Tkinter.Canvas(top, bg="green", height=320, width=320)
-
-	# thing = lg.Board(10,1,.6)
-	# # count=10
-	# # while(count>0):
-	# # 	Draw(C, thing)
-	# # 	C.pack()
-	# # 	thing.update()
-	# # 	count= count-1
+	life.update()
 	
-	# frame= Frame(top, width=350, height=350)
+	def on_click(event):
+		
+		life.update()
+		for row in xrange(10):
+			for col in xrange(10):
+				if life.grid[row][col]==1:
 
-	# Draw(C, thing)
-	# C.bind("<Key>", key)
-	# C.pack()
-	
+					color = "green"
+				else:
+					color="black"
+				event.widget.config(bg=color)
+				board[i][j] = color
+
+		
+		#event.widget.config(bg=color)
+		
+
+
+	for i,row in enumerate(board):
+		for j,column in enumerate(row):
+			L = tk.Label(root,text='    ',bg='grey')
+			L.grid()
+			L.bind('<Button-1>',lambda e,i=i,j=j: on_click(e))
 
 	root.mainloop()
