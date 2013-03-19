@@ -23,8 +23,10 @@ class GameBoard(tk.Frame):
         
         # this binding will cause a refresh if the user interactively
         # changes the window size
-		self.canvas.bind("<Configure>", self.draw(life_grid))
+		self.canvas.bind("<Button-1>", self.on_click())
 
+	def on_click(self):
+		pass
 	def draw(self, life_grid):
 		
 
@@ -38,29 +40,26 @@ class GameBoard(tk.Frame):
 					color="black"
 				else:
 					color="green"
-				self.canvas.create_rectangle(x1, y1, x2, y2, outline="black", fill=color, tags="square")
+				box[row][col]=self.canvas.create_rectangle(x1, y1, x2, y2, outline="black", fill=color, tags="square")
 		# life_grid.update()
 		# self.after(4000, self.draw(life_grid))
 		#color = self.color1 if color == self.color2 else self.color2
 		#life_grid.update()
 		#self.after(4000, self.draw(life_grid))
 	
-	def change_color(self, life_grid):
+	# def change_color(self, life_grid):
 		
 		
-			self.canvas.tag.itemconfigure(fill="blue")
+	# 		self.canvas.tag.itemconfigure(fill="blue")
 
-		# for row in range(self.rows):
-		# #color = self.color1 if color == self.color2 else self.color2
-		# 	for col in range(self.columns):
-		# 		if life_grid.grid[row][col] == 0:
-		# 			color="black"
-		# 		else:
-		# 			color="green"
-		# 		self.canvas.update(fill=color)
-
-
-
+	# 	# for row in range(self.rows):
+	# 	# #color = self.color1 if color == self.color2 else self.color2
+	# 	# 	for col in range(self.columns):
+	# 	# 		if life_grid.grid[row][col] == 0:
+	# 	# 			color="black"
+	# 	# 		else:
+	# 	# 			color="green"
+	# 	# 		self.canvas.update(fill=color)
 
 
 
@@ -72,28 +71,5 @@ if __name__ == "__main__":
 	root = tk.Tk()
 	life.update()
 	
-	def on_click(event):
-		
-		life.update()
-		for row in xrange(10):
-			for col in xrange(10):
-				if life.grid[row][col]==1:
-
-					color = "green"
-				else:
-					color="black"
-				event.widget.config(bg=color)
-				board[i][j] = color
-
-		
-		#event.widget.config(bg=color)
-		
-
-
-	for i,row in enumerate(board):
-		for j,column in enumerate(row):
-			L = tk.Label(root,text='    ',bg='grey')
-			L.grid()
-			L.bind('<Button-1>',lambda e,i=i,j=j: on_click(e))
 
 	root.mainloop()
