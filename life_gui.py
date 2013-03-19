@@ -18,10 +18,12 @@ class GameBoard(tk.Frame):
 		self.canvas = tk.Canvas(self, borderwidth=0, highlightthickness=0,
 		                        width=canvas_width, height=canvas_height, background="bisque")
 		self.canvas.pack(side="top", fill="both", expand=True, padx=2, pady=2)
-		self.go = tk.Button(self, text="Go", command=self.draw)
+		
+		#self.go = tk.Button(self, text="Go", command=self.draw)
+        
         # this binding will cause a refresh if the user interactively
         # changes the window size
-        #self.canvas.bind("<Configure>", self.refresh)
+		self.canvas.bind("<Configure>", self.draw(life_grid))
 
 	def draw(self, life_grid):
 		
@@ -36,20 +38,26 @@ class GameBoard(tk.Frame):
 					color="black"
 				else:
 					color="green"
-		self.canvas.create_rectangle(x1, y1, x2, y2, outline="black", fill=color, tags="square")
+				self.canvas.create_rectangle(x1, y1, x2, y2, outline="black", fill=color, tags="square")
+		# life_grid.update()
+		# self.after(4000, self.draw(life_grid))
 		#color = self.color1 if color == self.color2 else self.color2
 		#life_grid.update()
 		#self.after(4000, self.draw(life_grid))
 	
 	def change_color(self, life_grid):
-		for row in range(self.rows):
-		#color = self.color1 if color == self.color2 else self.color2
-			for col in range(self.columns):
-				if life_grid.grid[row][col] == 0:
-					color="black"
-				else:
-					color="green"
-				self.canvas.update(fill=color)
+		
+		
+			self.canvas.tag.itemconfigure(fill="blue")
+
+		# for row in range(self.rows):
+		# #color = self.color1 if color == self.color2 else self.color2
+		# 	for col in range(self.columns):
+		# 		if life_grid.grid[row][col] == 0:
+		# 			color="black"
+		# 		else:
+		# 			color="green"
+		# 		self.canvas.update(fill=color)
 
 
 
@@ -63,16 +71,16 @@ if __name__ == "__main__":
 	root = tk.Tk()
 
 	board = GameBoard(root)
-
 	board.draw(life_grid)
-	life_grid.update()
+		#life_grid.update()
 	board.change_color(life_grid)
-	board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
+	#board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
 
 	# life_grid.update()
 	# board.draw(life_grid)
 
-	# board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
+	board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
+
 
 	# C = Tkinter.Canvas(top, bg="green", height=320, width=320)
 
@@ -90,6 +98,5 @@ if __name__ == "__main__":
 	# C.bind("<Key>", key)
 	# C.pack()
 	
-
 
 	root.mainloop()
