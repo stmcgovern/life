@@ -51,9 +51,7 @@ class Board(object):
 		for row in xrange(self.size):
 			for col in xrange(self.size):
 				
-				
 				alive_neighbors = self.get_sum(row, col)
-				
 				
 				if(self.grid[row][col]==0):
 					next[row][col]=self.evolution_0(alive_neighbors)
@@ -119,7 +117,7 @@ class Board(object):
 			return 0
 
 	
-
+	
 	def display(self):
 		pprint(self.grid)
 	

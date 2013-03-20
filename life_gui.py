@@ -2,7 +2,7 @@
 import life_game as lg
 import Tkinter as tk
 LENGTH=100
-JUMP=1
+JUMP=100
 class GameBoard(tk.Frame):
     def __init__(self, parent, rows=LENGTH, columns=LENGTH, size=12, color1="black", color2="green"):
         '''size is the size of a square, in pixels'''
