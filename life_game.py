@@ -28,10 +28,12 @@ class Board(object):
 		self.time_steps=time_steps
 		self.initial_density =initial_density
  		
- 		self.grid = np.zeros(shape=(self.size,self.size),dtype=np.int)
- 		self.next_grid=np.zeros(shape=(self.size,self.size),dtype=np.int)
- 		#self.grid = [[0 for i in range(self.size)] for j in range(self.size)]
+ 		self.grid = np.zeros(shape=(self.size,self.size),dtype=int)
  		
+ 		self.next_grid = np.zeros(shape=(self.size,self.size),dtype=int)
+ 		#self.next_grid = [[0 for i in range(self.size)] for j in range(self.size)]
+ 		#self.grid = [[0 for i in range(self.size)] for j in range(self.size)]
+
  		#pprint(self.grid)
  		grains=int(self.initial_density*(self.size*self.size))
 		for x in xrange(grains):
@@ -41,9 +43,9 @@ class Board(object):
 			#pdb.set_trace()
 
 
-
 	def update(self):
 	
+		next=self.next_grid
 		#just scan through the whole thing
 		for row in xrange(self.size):
 			for col in xrange(self.size):
@@ -53,11 +55,12 @@ class Board(object):
 				alive_neighbors=self.sum_neighbors(neighbors)
 				
 				if(self.grid[row][col]==0):
-					self.next_grid[row][col]=self.evolution_0(alive_neighbors)
+					next[row][col]=self.evolution_0(alive_neighbors)
 				else:
-					self.next_grid[row][col]=self.evolution_1(alive_neighbors)
-
+					next[row][col]=self.evolution_1(alive_neighbors)
 		
+		self.grid=next
+		#self.next_grid=self.grid
 
 			# if(mutate==True):
 			# #probability that a dead cell animates
@@ -66,7 +69,7 @@ class Board(object):
 			# 		col=randint(0,self.size-1)
 			# 		self.grid[row][col]=1
 
-		self.grid, self.next_grid= self.next_grid, self.grid
+		
 
 	def get_neighbors(self, cell):
 		#wraps around if at the border
@@ -131,7 +134,7 @@ class Board(object):
 	
 	def go(self):
 		self.update()
-		self.display()
+		#self.display()
 
 def main():
 	
