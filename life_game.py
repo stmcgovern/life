@@ -4,6 +4,7 @@ from random import randint
 from pprint import pprint
 import sys
 import pdb
+import numpy as np
 
 
 #command line argument getting
@@ -27,8 +28,9 @@ class Board(object):
 		self.time_steps=time_steps
 		self.initial_density =initial_density
  		
- 		#self.grid = [[0]*size]*size#np.zeros(shape=(n_size,n_size),dtype=np.int)
- 		self.grid = [[0 for i in range(self.size)] for j in range(self.size)]
+ 		self.grid = np.zeros(shape=(self.size,self.size),dtype=np.int)
+ 		#self.grid = [[0 for i in range(self.size)] for j in range(self.size)]
+ 		
  		#pprint(self.grid)
  		grains=int(self.initial_density*(self.size*self.size))
 		for x in xrange(grains):

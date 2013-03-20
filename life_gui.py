@@ -1,12 +1,14 @@
 #visual representation for 10x10 life board
 import life_game as lg
 import Tkinter as tk
+LENGTH=100
+JUMP=100
 class GameBoard(tk.Frame):
-    def __init__(self, parent, rows=10, columns=10, size=32, color1="black", color2="green"):
+    def __init__(self, parent, rows=LENGTH, columns=LENGTH, size=12, color1="black", color2="green"):
         '''size is the size of a square, in pixels'''
 
         self.rows = rows
-        self.columns = columns
+        self .columns = columns
         self.size = size
         self.color1 = color1
         self.color2 = color2
@@ -22,7 +24,7 @@ class GameBoard(tk.Frame):
         self.canvas.pack(side="top", fill="both", expand=True, padx=2, pady=2)
 
 
-        self.life=lg.Board(10,1,0.6)
+        self.life=lg.Board(LENGTH,1,0.6)
         self.life.go()
         # this binding will cause a refresh if the user interactively
         # changes the window size
@@ -37,10 +39,10 @@ class GameBoard(tk.Frame):
         self.size = min(xsize, ysize)
         self.canvas.delete("square")
         color = self.color2
-        for row in range(self.rows):
-            for col in range(self.columns):
-                x1 = (col * self.size)
-                y1 = (row * self.size)
+        for row in xrange(self.rows):
+            for col in xrange(self.columns):
+                x1 =col * self.size
+                y1 = row * self.size
                 x2 = x1 + self.size
                 y2 = y1 + self.size
                 
@@ -49,10 +51,12 @@ class GameBoard(tk.Frame):
 
         
     def next(self, event):
-        self.life.update()
+        for x in xrange(JUMP):
+            self.life.update()
+            
         count=0
-        for row in xrange(10):
-            for col in xrange(10):
+        for row in xrange(self.rows):
+            for col in xrange(self.columns):
                 x=self.list[count]
                 if self.life.grid[row][col]==1:
                     color="green"
