@@ -1,0 +1,6 @@
+*.pyc
+*.log
+tk*
+test*
+mat*
+grid_test*
