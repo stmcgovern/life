@@ -43,6 +43,7 @@ class Board(object):
 			#pdb.set_trace()
 
 
+
 	def update(self):
 	
 		next=self.next_grid
@@ -50,9 +51,9 @@ class Board(object):
 		for row in xrange(self.size):
 			for col in xrange(self.size):
 				
-				cell = (row,col)
-				neighbors = self.get_neighbors(cell)
-				alive_neighbors=self.sum_neighbors(neighbors)
+				
+				alive_neighbors = self.get_sum(row, col)
+				
 				
 				if(self.grid[row][col]==0):
 					next[row][col]=self.evolution_0(alive_neighbors)
@@ -60,8 +61,7 @@ class Board(object):
 					next[row][col]=self.evolution_1(alive_neighbors)
 		
 		self.grid=next
-		#self.next_grid=self.grid
-
+		
 			# if(mutate==True):
 			# #probability that a dead cell animates
 			# 	if(randint(0,100)<50):
@@ -71,11 +71,10 @@ class Board(object):
 
 		
 
-	def get_neighbors(self, cell):
+	def get_sum(self, i, j):
 		#wraps around if at the border
 		far =self.size-1
-		neighbors=[]
-		i,j=cell
+		
 		up=i-1
 		down=i+1
 		left=j-1
@@ -90,28 +89,20 @@ class Board(object):
 		if(j==far):
 			right=0
 
-		neighbors.append((up,left))
-		neighbors.append((up,j))
-		neighbors.append((up,right))
-		neighbors.append((i,left))
-		neighbors.append((i,right))
-		neighbors.append((down,left))
-		neighbors.append((down,j))
-		neighbors.append((down,right))
-
-		return neighbors
-
-	def sum_neighbors(self, neighbors):
 		alive_neighbors=0
-		for neighbor in neighbors:
-			i, j = neighbor
-			#print "i,j", i,j
-			#print "grid_value", grid[i][j]
-			alive_neighbors += self.grid[i][j]
+		
+		alive_neighbors += self.grid[up][left]
+		alive_neighbors += self.grid[up][j]
+		alive_neighbors += self.grid[up][right]
+		alive_neighbors += self.grid[i][left]
+		alive_neighbors += self.grid[i][right]
+		alive_neighbors += self.grid[down][left]
+		alive_neighbors += self.grid[down][j]
+		alive_neighbors += self.grid[down][right]
 
-		# print "alive_neighbors", alive_neighbors
-		#assert alive_neighbors == sum(self.grid[i][j] for i, j in neighbors)
+
 		return alive_neighbors
+
 
 	def evolution_0(self, alive_neighbors): #return 0 or 1 based on rules for dead cell
 		if  alive_neighbors== 3:
