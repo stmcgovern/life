@@ -103,25 +103,25 @@ class Board(object):
 		left=j-1
 		right=j+1
 		
-		if(i==0):
-			up=far
-		if(i==far):
-			down=0
-		if(j==0):
-			left=far
-		if(j==far):
-			right=0
 
 		alive_neighbors=0
 		
-		alive_neighbors += self.grid[up][left]
-		alive_neighbors += self.grid[up][j]
-		alive_neighbors += self.grid[up][right]
-		alive_neighbors += self.grid[i][left]
-		alive_neighbors += self.grid[i][right]
-		alive_neighbors += self.grid[down][left]
-		alive_neighbors += self.grid[down][j]
-		alive_neighbors += self.grid[down][right]
+		if(up >= 0 and left >= 0):
+			alive_neighbors += self.grid[up][left]
+		if(up >= 0):
+			alive_neighbors += self.grid[up][j]
+		if(up >= 0 and right <= far):
+			alive_neighbors += self.grid[up][right]
+		if(left >= 0):
+			alive_neighbors += self.grid[i][left]
+		if(right <= far):		
+			alive_neighbors += self.grid[i][right]
+		if(down <= far and left >= 0):		
+			alive_neighbors += self.grid[down][left]
+		if(down <= far):			
+			alive_neighbors += self.grid[down][j]
+		if(down <= far and right <= far):		
+			alive_neighbors += self.grid[down][right]
 
 
 		return alive_neighbors
