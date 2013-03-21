@@ -1,5 +1,7 @@
 life simulation
 ====
+to do:
+learn markdown
 
 to run:
 

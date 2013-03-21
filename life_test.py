@@ -12,8 +12,8 @@ if len(sys.argv)==4:
 else:
 	n_size =10
 	time_steps=10
-	initial_density = 0.4
-	initial_jump = 1
+	initial_density = 0.2
+	initial_jump = 0
 
 
 

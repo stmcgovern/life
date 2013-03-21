@@ -3,7 +3,7 @@ import life_game as lg
 import Tkinter as tk
 import sys
 
-CLICK_JUMP=50
+
 
 if len(sys.argv)==5:
 
@@ -11,14 +11,23 @@ if len(sys.argv)==5:
     time_steps=int(sys.argv[2])
     initial_density =float(sys.argv[3])
     initial_jump = int(sys.argv[4])
+
+if len(sys.argv)==3:
+    n_size=int(sys.argv[1])
+    initial_density =float(sys.argv[2])
+    time_steps=1
+    initial_jump=0
+    CLICK_JUMP=1
+
 else:
 
     #LENGTH=50
     
     n_size =10
     time_steps=10
-    initial_density = 0.2
+    initial_density = 0.1
     initial_jump = 100
+    CLICK_JUMP=1
 
 
 
