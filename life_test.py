@@ -15,7 +15,7 @@ else:
 
 
 
-def main():
+def time_test(n_size, time_steps):
 	
 	board=lg.Board(n_size, time_steps, initial_density)
 	start=time.time()
@@ -26,7 +26,14 @@ def main():
 	end=time.time()
 	duration=end-start
 	print duration
+	#make a test log
 
+def main():
+	print "board size, time steps"
+	for n in xrange(10,100,10):
+		for t in xrange(1, 50, 10):
+			print n,t
+			time_test(n, t)
 
 if __name__ == '__main__':
 	main()
