@@ -1,4 +1,20 @@
-life
+life simulation
+====
+
+to run:
+python life_gui.py [board size, int n] [ time_steps, int t] [initial density float 0-1] [initial jump, int jump]
+
+board size nxn cells
+time_steps is how many times to update (tick)
+initial density gives fraction of alive cells, "random" distribution
+initial jump is how many ticks update runs through upon initialization
+
+e.g
+python life_gui.py 50 1 0.4 100
+
+note:time_steps at the moment is not used in click based progressions
+
+
 ====
 
 Conway's game of life 

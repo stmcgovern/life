@@ -1,10 +1,32 @@
 #visual representation for 10x10 life board
 import life_game as lg
 import Tkinter as tk
-LENGTH=100
-JUMP=100
+import sys
+
+CLICK_JUMP=50
+
+if len(sys.argv)==5:
+
+    n_size=int(sys.argv[1])
+    time_steps=int(sys.argv[2])
+    initial_density =float(sys.argv[3])
+    initial_jump = int(sys.argv[4])
+else:
+
+    #LENGTH=50
+    
+    n_size =10
+    time_steps=10
+    initial_density = 0.2
+    initial_jump = 100
+
+
+
+
+
+
 class GameBoard(tk.Frame):
-    def __init__(self, parent, rows=LENGTH, columns=LENGTH, size=12, color1="black", color2="green"):
+    def __init__(self, parent, rows=n_size, columns=n_size, size=12, color1="black", color2="green"):
         '''size is the size of a square, in pixels'''
 
         self.rows = rows
@@ -24,8 +46,9 @@ class GameBoard(tk.Frame):
         self.canvas.pack(side="top", fill="both", expand=True, padx=2, pady=2)
 
 
-        self.life=lg.Board(LENGTH,1,0.6)
-        self.life.go()
+        self.life=lg.Board(n_size, time_steps, initial_density, initial_jump)
+        #self.life.go()
+
         # this binding will cause a refresh if the user interactively
         # changes the window size
         self.canvas.bind("<Configure>", self.refresh)
@@ -51,7 +74,7 @@ class GameBoard(tk.Frame):
 
         
     def next(self, event):
-        for x in xrange(JUMP):
+        for x in xrange(CLICK_JUMP):
             self.life.update()
             
         count=0

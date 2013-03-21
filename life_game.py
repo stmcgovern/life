@@ -10,23 +10,26 @@ import numpy as np
 #command line argument getting
 print sys.argv
 
-if len(sys.argv)==4:
+if len(sys.argv)==5:
 
 	n_size=int(sys.argv[1])
 	time_steps=int(sys.argv[2])
 	initial_density =float(sys.argv[3])
+	initial_jump = int(sys.argv[4])
 else:
 	n_size =10
 	time_steps=10
 	initial_density = 0.4
+	initial_jump = 100
 
 
 
 class Board(object):
-	def __init__(self, size, time_steps, initial_density):
+	def __init__(self, size, time_steps, initial_density, initial_jump):
 		self.size=size
 		self.time_steps=time_steps
 		self.initial_density =initial_density
+		self.initial_jump = initial_jump
  		
  		self.grid = np.zeros(shape=(self.size,self.size),dtype=int)
  		
@@ -41,6 +44,10 @@ class Board(object):
 			col=randint(0,self.size-1)
 			self.grid[row][col]=1
 			#pdb.set_trace()
+
+		for x in xrange(self.initial_jump):
+			self.update()
+		print "ready to rock"
 
 
 
@@ -127,7 +134,7 @@ class Board(object):
 
 def main():
 	
-	board=Board(n_size, time_steps, initial_density)
+	board=Board(n_size, time_steps, initial_density, initial_jump)
 
 	pprint(board.grid)
 	print "go!"
