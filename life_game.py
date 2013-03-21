@@ -1,10 +1,21 @@
-#reproduce Conway's game of Life
+#Conway's game of Life simulation
+
+#things to add:
+# world connectivity: wrap OR fall off edge(DEAD_BORDERS=True), or arbitrary cell "neighbors"
+# population count: track population stability
+# SEEDING: add configurations of cells rather than random seed
+# zoo: create a pen to contain a number of cells (a box of permanently dead cells)
+# 		place configurations of cells (animal) in a pen 
+
 
 from random import randint
 from pprint import pprint
 import sys
 import pdb
 import numpy as np
+
+
+DEAD_BORDERS=False
 
 
 #command line argument getting
@@ -39,9 +50,15 @@ class Board(object):
 
  		#pprint(self.grid)
  		grains=int(self.initial_density*(self.size*self.size))
+
 		for x in xrange(grains):
+			
 			row=randint(0,self.size-1) 
 			col=randint(0,self.size-1)
+			while (self.grid[row][col]==1):
+				row=randint(0,self.size-1) 
+				col=randint(0,self.size-1)
+				
 			self.grid[row][col]=1
 			#pdb.set_trace()
 
@@ -78,6 +95,7 @@ class Board(object):
 
 	def get_sum(self, i, j):
 		#wraps around if at the border
+		
 		far =self.size-1
 		
 		up=i-1
