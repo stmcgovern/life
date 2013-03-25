@@ -91,11 +91,10 @@ class Board(object):
 			# 		col=randint(0,self.size-1)
 			# 		self.grid[row][col]=1
 
-		
+
 
 	def get_sum(self, i, j):
 		#wraps around if at the border
-		
 		far =self.size-1
 		
 		up=i-1
@@ -103,30 +102,29 @@ class Board(object):
 		left=j-1
 		right=j+1
 		
+		if(i==0):
+			up=far
+		if(i==far):
+			down=0
+		if(j==0):
+			left=far
+		if(j==far):
+			right=0
 
 		alive_neighbors=0
 		
-		if(up >= 0 and left >= 0):
-			alive_neighbors += self.grid[up][left]
-		if(up >= 0):
-			alive_neighbors += self.grid[up][j]
-		if(up >= 0 and right <= far):
-			alive_neighbors += self.grid[up][right]
-		if(left >= 0):
-			alive_neighbors += self.grid[i][left]
-		if(right <= far):		
-			alive_neighbors += self.grid[i][right]
-		if(down <= far and left >= 0):		
-			alive_neighbors += self.grid[down][left]
-		if(down <= far):			
-			alive_neighbors += self.grid[down][j]
-		if(down <= far and right <= far):		
-			alive_neighbors += self.grid[down][right]
+		alive_neighbors += self.grid[up][left]
+		alive_neighbors += self.grid[up][j]
+		alive_neighbors += self.grid[up][right]
+		alive_neighbors += self.grid[i][left]
+		alive_neighbors += self.grid[i][right]
+		alive_neighbors += self.grid[down][left]
+		alive_neighbors += self.grid[down][j]
+		alive_neighbors += self.grid[down][right]
 
 
 		return alive_neighbors
-
-
+	
 	def evolution_0(self, alive_neighbors): #return 0 or 1 based on rules for dead cell
 		if  alive_neighbors== 3:
 			return 1
@@ -136,7 +134,7 @@ class Board(object):
 	def evolution_1(self,alive_neighbors): #return 0 or 1 based on rules for alive cell
 		if alive_neighbors<2:
 			return 0
-		elif alive_neighbors <4:
+		elif alive_neighbors ==2 or alive_neighbors ==3:
 			return 1
 		else:
 			return 0
