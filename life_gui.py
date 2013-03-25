@@ -9,9 +9,10 @@ if len(sys.argv)==5:
 
     n_size=int(sys.argv[1])
     time_steps=1
+    CLICK_JUMP=int(sys.argv[2])
     initial_density =float(sys.argv[3])
     initial_jump = int(sys.argv[4])
-    CLICK_JUMP=int(sys.argv[2])
+    
 
 elif len(sys.argv)==3:
     n_size=int(sys.argv[1])
@@ -25,9 +26,9 @@ else:
     #LENGTH=50
     
     n_size =10
-    time_steps=10
+    time_steps=1
     initial_density = 0.1
-    initial_jump = 100
+    initial_jump = 0
     CLICK_JUMP=1
 
 

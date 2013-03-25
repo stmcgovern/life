@@ -29,9 +29,9 @@ if len(sys.argv)==5:
 	initial_jump = int(sys.argv[4])
 else:
 	n_size =10
-	time_steps=10
+	time_steps=1
 	initial_density = 0.4
-	initial_jump = 100
+	initial_jump = 0
 
 
 
@@ -50,21 +50,50 @@ class Board(object):
 
  		#pprint(self.grid)
  		grains=int(self.initial_density*(self.size*self.size))
+ 		self.init_seed(grains, "glider")
 
-		for x in xrange(grains):
-			
-			row=randint(0,self.size-1) 
-			col=randint(0,self.size-1)
-			while (self.grid[row][col]==1):
+ 		#makes it go a set number of initial ticks
+ 		for x in xrange(self.initial_jump):
+			self.update()
+	
+		print "ready to rock"
+
+ 	
+ 	def init_seed(self, grains, shape):
+
+
+ 		#random (as fraction of board)
+ 		if shape=="glider":
+
+ 			row = int((self.size)/2)
+
+ 			col = int((self.size)/2)
+
+ 			self.grid[row][col]=1
+ 			self.grid[row+1][col]=1
+ 			self.grid[row+2][col]=1
+
+
+ 			self.grid[row+1][col-2]=1
+ 			self.grid[row+2][col-1]=1
+
+ 			
+
+ 		else:
+
+			for x in xrange(grains):
+				
 				row=randint(0,self.size-1) 
 				col=randint(0,self.size-1)
-				
-			self.grid[row][col]=1
-			#pdb.set_trace()
+				while (self.grid[row][col]==1):
+					row=randint(0,self.size-1) 
+					col=randint(0,self.size-1)
+					
+				self.grid[row][col]=1
+				#pdb.set_trace()
 
-		for x in xrange(self.initial_jump):
-			self.update()
-		print "ready to rock"
+
+		
 
 
 
@@ -76,7 +105,13 @@ class Board(object):
 			for col in xrange(self.size):
 				
 				alive_neighbors = self.get_sum(row, col)
-				#print "alive_neighbors", alive_neighbors
+				if(alive_neighbors>0):
+					if(self.grid[row][col]==0):
+						print "dead cell = ", row, col
+					elif(self.grid[row][col]==1):
+						print "livecell = ", row, col
+					print "alive_neighbors", alive_neighbors
+
 				if(self.grid[row][col]==0):
 					next[row][col]=self.evolution_0(alive_neighbors)
 				else:
@@ -136,7 +171,7 @@ class Board(object):
 	def evolution_1(self,alive_neighbors): #return 0 or 1 based on rules for alive cell
 		if alive_neighbors<2:
 			return 0
-		elif alive_neighbors <4:
+		elif alive_neighbors ==2 and alive_neighbors ==3 :
 			return 1
 		else:
 			return 0
