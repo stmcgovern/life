@@ -9,9 +9,10 @@ if len(sys.argv)==5:
 
     n_size=int(sys.argv[1])
     time_steps=1
+    CLICK_JUMP=int(sys.argv[2])
     initial_density =float(sys.argv[3])
     initial_jump = int(sys.argv[4])
-    CLICK_JUMP=int(sys.argv[2])
+    
 
 elif len(sys.argv)==3:
     n_size=int(sys.argv[1])
@@ -36,7 +37,7 @@ else:
 
 
 class GameBoard(tk.Frame):
-    def __init__(self, parent, rows=n_size, columns=n_size, size=12, color1="black", color2="green"):
+    def __init__(self, parent, rows=n_size, columns=n_size, size=5, color1="black", color2="green"):
         '''size is the size of a square, in pixels'''
 
         self.rows = rows

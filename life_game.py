@@ -16,6 +16,7 @@ import numpy as np
 
 
 DEAD_BORDERS=False
+FIGURE_INIT="glidersdf"
 
 
 #command line argument getting
@@ -44,13 +45,13 @@ class Board(object):
  		
 		self.grid = np.zeros(shape=(self.size,self.size),dtype=int)
  		
-		self.next_grid = np.zeros(shape=(self.size,self.size),dtype=int)
+		#self.next_grid = np.zeros(shape=(self.size,self.size),dtype=int)
  		#self.next_grid = [[0 for i in range(self.size)] for j in range(self.size)]
  		#self.grid = [[0 for i in range(self.size)] for j in range(self.size)]
 
 			#pprint(self.grid)
 		grains=int(self.initial_density*(self.size*self.size))
-		self.init_seed(grains, "glider")
+		self.init_seed(grains, FIGURE_INIT)
 
 		#makes it go a set number of initial ticks
 		for x in xrange(self.initial_jump):
@@ -59,11 +60,11 @@ class Board(object):
 		print "ready to rock"
 
 
-	def init_seed(self, grains, shape):
+	def init_seed(self, grains, figure):
 
 
 		#random (as fraction of board)
-		if shape=="glider":
+		if figure=="glider":
 
 			row = int((self.size)/2)
 
@@ -96,18 +97,28 @@ class Board(object):
 
 	def update(self):
 	
-		next=self.next_grid
+		next=np.zeros(shape=(self.size,self.size),dtype=int)
 		#just scan through the whole thing
 		for row in xrange(self.size):
 			for col in xrange(self.size):
 				
 				alive_neighbors = self.get_sum(row, col)
-				#print "alive_neighbors", alive_neighbors
+				if alive_neighbors>1:
+					pass
+					# if(self.grid[row][col]==0):
+					# 	print "dead cell", row, col
+						
+					# else:
+					# 	print "alive cell", row, col
+					# 	print "	alive_neighbors", alive_neighbors
+					
 				if(self.grid[row][col]==0):
+				
 					next[row][col]=self.evolution_0(alive_neighbors)
 				else:
 					next[row][col]=self.evolution_1(alive_neighbors)
-		
+		#pdb.set_trace()
+
 		self.grid=next
 		
 			# if(mutate==True):
@@ -130,11 +141,12 @@ class Board(object):
 		
 		if(i==0):
 			up=far
-		if(i==far):
+		elif(i==far):
 			down=0
+		
 		if(j==0):
 			left=far
-		if(j==far):
+		elif(j==far):
 			right=0
 
 		alive_neighbors=0
