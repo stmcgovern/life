@@ -42,29 +42,55 @@ class Board(object):
 		self.initial_density =initial_density
 		self.initial_jump = initial_jump
  		
- 		self.grid = np.zeros(shape=(self.size,self.size),dtype=int)
+		self.grid = np.zeros(shape=(self.size,self.size),dtype=int)
  		
- 		self.next_grid = np.zeros(shape=(self.size,self.size),dtype=int)
+		self.next_grid = np.zeros(shape=(self.size,self.size),dtype=int)
  		#self.next_grid = [[0 for i in range(self.size)] for j in range(self.size)]
  		#self.grid = [[0 for i in range(self.size)] for j in range(self.size)]
 
- 		#pprint(self.grid)
- 		grains=int(self.initial_density*(self.size*self.size))
+			#pprint(self.grid)
+		grains=int(self.initial_density*(self.size*self.size))
+		self.init_seed(grains, "glider")
 
-		for x in xrange(grains):
-			
-			row=randint(0,self.size-1) 
-			col=randint(0,self.size-1)
-			while (self.grid[row][col]==1):
-				row=randint(0,self.size-1) 
-				col=randint(0,self.size-1)
-				
-			self.grid[row][col]=1
-			#pdb.set_trace()
-
+		#makes it go a set number of initial ticks
 		for x in xrange(self.initial_jump):
 			self.update()
+	
 		print "ready to rock"
+
+
+	def init_seed(self, grains, shape):
+
+
+		#random (as fraction of board)
+		if shape=="glider":
+
+			row = int((self.size)/2)
+
+			col = int((self.size)/2)
+
+			self.grid[row][col]=1
+			self.grid[row+1][col]=1
+			self.grid[row+2][col]=1
+
+
+			self.grid[row+1][col-2]=1
+			self.grid[row+2][col-1]=1
+
+ 			
+
+		else:
+
+			for x in xrange(grains):
+				
+				row=randint(0,self.size-1) 
+				col=randint(0,self.size-1)
+				while (self.grid[row][col]==1):
+					row=randint(0,self.size-1) 
+					col=randint(0,self.size-1)
+					
+				self.grid[row][col]=1
+				#pdb.set_trace()
 
 
 
