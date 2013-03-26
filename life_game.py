@@ -16,7 +16,7 @@ import numpy as np
 
 
 DEAD_BORDERS=False
-FIGURE_INIT="glidersdf"
+FIGURE_INIT="glider"
 
 
 #command line argument getting
@@ -65,18 +65,19 @@ class Board(object):
 
 		#random (as fraction of board)
 		if figure=="glider":
+			n=0
+			while n <5:
+			
+				row=randint(0,self.size-1) 
+				col=randint(0,self.size-1)
+				self.grid[row][col]=1
+				self.grid[row+1][col]=1
+				self.grid[row+2][col]=1
 
-			row = int((self.size)/2)
 
-			col = int((self.size)/2)
-
-			self.grid[row][col]=1
-			self.grid[row+1][col]=1
-			self.grid[row+2][col]=1
-
-
-			self.grid[row+1][col-2]=1
-			self.grid[row+2][col-1]=1
+				self.grid[row+1][col-2]=1
+				self.grid[row+2][col-1]=1
+				n=n+1
 
  			
 
