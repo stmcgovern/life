@@ -2,42 +2,19 @@
 import life_game as lg
 import Tkinter as tk
 import sys
+import argparse
+import pdb
 
+parser = argparse.ArgumentParser()
+parser.add_argument('--file', help='optionally, an input file', default=None)
+parser.add_argument('--size', help='length of a side of the board', default=100)
+parser.add_argument('--rand_dens', help='Initialize board randomly with --rand_dens <density>', type=float)
 
-
-if len(sys.argv)==5:
-
-    n_size=int(sys.argv[1])
-    time_steps=1
-    CLICK_JUMP=int(sys.argv[2])
-    initial_density =float(sys.argv[3])
-    initial_jump = int(sys.argv[4])
-    
-
-elif len(sys.argv)==3:
-    n_size=int(sys.argv[1])
-    initial_density =float(sys.argv[2])
-    time_steps=1
-    initial_jump=0
-    CLICK_JUMP=1
-
-else:
-
-    #LENGTH=50
-    
-    n_size =10
-    time_steps=10
-    initial_density = 0.1
-    initial_jump = 100
-    CLICK_JUMP=1
-
-
-
-
-
+args = parser.parse_args()
+print args
 
 class GameBoard(tk.Frame):
-    def __init__(self, parent, rows=n_size, columns=n_size, size=5, color1="black", color2="green"):
+    def __init__(self, parent, rows=args.size, columns=args.size, size=5, color1="black", color2="green", grid_file=None):
         '''size is the size of a square, in pixels'''
 
         self.rows = rows
@@ -45,8 +22,10 @@ class GameBoard(tk.Frame):
         self.size = size
         self.color1 = color1
         self.color2 = color2
+        self.parent = parent
+        self.running = True
         
-        self.list = []
+        self.square_list = []
 
         canvas_width = columns * size
         canvas_height = rows * size
@@ -57,58 +36,56 @@ class GameBoard(tk.Frame):
         self.canvas.pack(side="top", fill="both", expand=True, padx=2, pady=2)
 
 
-        self.life=lg.Board(n_size, time_steps, initial_density, initial_jump)
-        #self.life.go()
-
-        # this binding will cause a refresh if the user interactively
-        # changes the window size
-        self.canvas.bind("<Configure>", self.refresh)
+        self.life = lg.Board(args.size, args.rand_dens, args.file)
+        self.draw()
+        self.next()
 
 
-    def refresh(self, event):
+    def draw(self):
         
         '''Redraw the board, possibly in response to window being resized'''
-        xsize = int((event.width-1) / self.columns)
-        ysize = int((event.height-1) / self.rows)
-        self.size = min(xsize, ysize)
+        print "Drawing board"
+
         self.canvas.delete("square")
         color = self.color2
         for row in xrange(self.rows):
+            grid_row = []
             for col in xrange(self.columns):
-                x1 =col * self.size
+                x1 = col * self.size
                 y1 = row * self.size
                 x2 = x1 + self.size
                 y2 = y1 + self.size
                 
                 square_id=self.canvas.create_rectangle(x1, y1, x2, y2, outline="black", fill=color, tags="square")
-                self.list.append(square_id)
+                grid_row.append(square_id)
+            self.square_list.append(grid_row)
 
         
-    def next(self, event):
-        for x in xrange(CLICK_JUMP):
+    def next(self):
+        print "next firing, self.running is", self.running
+        if self.running:
             self.life.update()
-            
-        count=0
-        for row in xrange(self.rows):
-            for col in xrange(self.columns):
-                x=self.list[count]
-                if self.life.grid[row][col]==1:
-                    color="green"
-                else:
-                    color="black"
+                
+            for row in xrange(self.rows):
+                for col in xrange(self.columns):
+                    square_id = self.square_list[row][col]
+                    if self.life.grid[row][col]==1:
+                        color="green"
+                    else:
+                        color="black"
 
-                self.canvas.itemconfig(x, fill=color)
-            
+                    self.canvas.itemconfig(square_id, fill=color)
+        self.parent.after(100, self.next)
 
-                count=count+1
-
+    def pause_or_restart(self, event):
+        self.running = not self.running
 
 if __name__ == "__main__":
    
     root = tk.Tk()
     board = GameBoard(root)
     board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
-    board.canvas.bind('<Button-1>', board.next)
+    board.canvas.bind('<Button-1>', board.pause_or_restart)
     root.mainloop()
    
 	

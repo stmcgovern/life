@@ -19,81 +19,48 @@ DEAD_BORDERS=False
 FIGURE_INIT="glider"
 
 
-#command line argument getting
-print sys.argv
 
-if len(sys.argv)==5:
-
-	n_size=int(sys.argv[1])
-	time_steps=int(sys.argv[2])
-	initial_density =float(sys.argv[3])
-	initial_jump = int(sys.argv[4])
-else:
-	n_size =10
-	time_steps=10
-	initial_density = 0.4
-	initial_jump = 100
 
 
 
 class Board(object):
-	def __init__(self, size, time_steps, initial_density, initial_jump):
+	def __init__(self, size, initial_density, grid_file):
 		self.size=size
-		self.time_steps=time_steps
-		self.initial_density =initial_density
-		self.initial_jump = initial_jump
+		
  		
-		self.grid = np.zeros(shape=(self.size,self.size),dtype=int)
- 		
-		#self.next_grid = np.zeros(shape=(self.size,self.size),dtype=int)
- 		#self.next_grid = [[0 for i in range(self.size)] for j in range(self.size)]
- 		#self.grid = [[0 for i in range(self.size)] for j in range(self.size)]
+ 		if grid_file:
+			self.grid=self.build_from_file(grid_file)
+		elif initial_density is not None:
+			self.grid=self.build_rand(initial_density)
+		
 
-			#pprint(self.grid)
-		grains=int(self.initial_density*(self.size*self.size))
-		self.init_seed(grains, FIGURE_INIT)
-
-		#makes it go a set number of initial ticks
-		for x in xrange(self.initial_jump):
-			self.update()
-	
 		print "ready to rock"
 
-
-	def init_seed(self, grains, figure):
-
-
-		#random (as fraction of board)
-		if figure=="glider":
-			n=0
-			while n <5:
-			
-				row=randint(0,self.size-1) 
-				col=randint(0,self.size-1)
-				self.grid[row][col]=1
-				self.grid[row+1][col]=1
-				self.grid[row+2][col]=1
-
-
-				self.grid[row+1][col-2]=1
-				self.grid[row+2][col-1]=1
-				n=n+1
-
- 			
-
-		else:
-
-			for x in xrange(grains):
+	def build_rand(self, initial_density):
+		grid= np.zeros(shape=(self.size,self.size),dtype=int)
+		grains=int(self.initial_density*(self.size*self.size))
+		for x in xrange(grains):
 				
 				row=randint(0,self.size-1) 
 				col=randint(0,self.size-1)
-				while (self.grid[row][col]==1):
+				while (grid[row][col]==1):
 					row=randint(0,self.size-1) 
 					col=randint(0,self.size-1)
 					
-				self.grid[row][col]=1
-				#pdb.set_trace()
+				grid[row][col]=1
 
+		return grid
+
+	def build_from_file(self, grid_file):
+		grid= np.zeros(shape=(self.size,self.size),dtype=int)
+
+		with file(grid_file, 'r') as f:
+			for i,line in enumerate(f):
+				stripped_line= line.strip()
+				for j,char in enumerate(stripped_line):
+					grid[i][j]=char
+
+		return grid
 
 
 	def update(self):
@@ -207,6 +174,20 @@ def main():
 
 
 if __name__ == '__main__':
+	#command line argument getting
+	print sys.argv
+
+	if len(sys.argv)==5:
+
+		n_size=int(sys.argv[1])
+		time_steps=int(sys.argv[2])
+		initial_density =float(sys.argv[3])
+		initial_jump = int(sys.argv[4])
+	else:
+		n_size =10
+		time_steps=10
+		initial_density = 0.4
+		initial_jump = 100
 	main()
 
 
