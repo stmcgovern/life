@@ -9,7 +9,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--file', help='optionally, an input file', default=None)
 parser.add_argument('--size', help='length of a side of the board', type=int, default=100)
 parser.add_argument('--rand_dens', help='Initialize board randomly with --rand_dens <density>', type=float, default=0.1)
-parser.add_argument('--wrap', help='True: board borders wrap around(torus) False: borders do not wrap(cliff)', type=int, default=1)
+parser.add_argument('--wrap', help='1: board borders wrap around(torus) 0: borders do not wrap(cliff)', type=int, default=1)
 args = parser.parse_args()
 print args
 
