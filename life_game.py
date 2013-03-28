@@ -15,30 +15,23 @@ import pdb
 import numpy as np
 
 
-DEAD_BORDERS=False
-FIGURE_INIT="glider"
-
-
-
-
-
-
 class Board(object):
-	def __init__(self, size, initial_density, grid_file):
+	def __init__(self, size, initial_density, grid_file, wrap):
 		self.size=size
-		
- 		
+		self.wrap=wrap
+
+
  		if grid_file:
 			self.grid=self.build_from_file(grid_file)
 		elif initial_density is not None:
 			self.grid=self.build_rand(initial_density)
-		
+
 
 		print "ready to rock"
 
 	def build_rand(self, initial_density):
 		grid= np.zeros(shape=(self.size,self.size),dtype=int)
-		grains=int(self.initial_density*(self.size*self.size))
+		grains=int(initial_density*(self.size*self.size))
 		for x in xrange(grains):
 				
 				row=randint(0,self.size-1) 
@@ -70,15 +63,10 @@ class Board(object):
 		for row in xrange(self.size):
 			for col in xrange(self.size):
 				
-				alive_neighbors = self.get_sum(row, col)
-				if alive_neighbors>1:
-					pass
-					# if(self.grid[row][col]==0):
-					# 	print "dead cell", row, col
-						
-					# else:
-					# 	print "alive cell", row, col
-					# 	print "	alive_neighbors", alive_neighbors
+				if self.wrap==1:
+					alive_neighbors = self.get_sum_wrap(row, col)
+				else:
+					alive_neighbors = self.get_sum_no_wrap(row, col)
 					
 				if(self.grid[row][col]==0):
 				
@@ -95,11 +83,43 @@ class Board(object):
 			# 		row=randint(0,self.size-1) 
 			# 		col=randint(0,self.size-1)
 			# 		self.grid[row][col]=1
+	
+	def get_sum_no_wrap(self, i, j):
+		#edge cells have fewer neighbors
+		far =self.size-1
+		
+		up=i-1
+		down=i+1
+		left=j-1
+		right=j+1
+		
+
+		alive_neighbors=0
+		
+		if(up >= 0 and left >= 0):
+			alive_neighbors += self.grid[up][left]
+		if(up >= 0):
+			alive_neighbors += self.grid[up][j]
+		if(up >= 0 and right <= far):
+			alive_neighbors += self.grid[up][right]
+		if(left >= 0):
+			alive_neighbors += self.grid[i][left]
+		if(right <= far):		
+			alive_neighbors += self.grid[i][right]
+		if(down <= far and left >= 0):		
+			alive_neighbors += self.grid[down][left]
+		if(down <= far):			
+			alive_neighbors += self.grid[down][j]
+		if(down <= far and right <= far):		
+			alive_neighbors += self.grid[down][right]
 
 
+		return alive_neighbors
 
-	def get_sum(self, i, j):
+	def get_sum_wrap(self, i, j):
+		
 		#wraps around if at the border
+		#all cells have 8 neighbors
 		far =self.size-1
 		
 		up=i-1
@@ -145,7 +165,11 @@ class Board(object):
 		else:
 			return 0
 
-	
+	def pop_stats(self):
+		pass
+		# stats="log.txt"
+		# with file(stats, 'w') as f:
+		# 	for 
 	
 	def display(self):
 		pprint(self.grid)

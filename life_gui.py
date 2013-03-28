@@ -7,9 +7,9 @@ import pdb
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--file', help='optionally, an input file', default=None)
-parser.add_argument('--size', help='length of a side of the board', default=100)
-parser.add_argument('--rand_dens', help='Initialize board randomly with --rand_dens <density>', type=float)
-
+parser.add_argument('--size', help='length of a side of the board', type=int, default=100)
+parser.add_argument('--rand_dens', help='Initialize board randomly with --rand_dens <density>', type=float, default=0.1)
+parser.add_argument('--wrap', help='True: board borders wrap around(torus) False: borders do not wrap(cliff)', type=int, default=1)
 args = parser.parse_args()
 print args
 
@@ -36,14 +36,14 @@ class GameBoard(tk.Frame):
         self.canvas.pack(side="top", fill="both", expand=True, padx=2, pady=2)
 
 
-        self.life = lg.Board(args.size, args.rand_dens, args.file)
+        self.life = lg.Board(args.size, args.rand_dens, args.file, args.wrap)
         self.draw()
         self.next()
 
 
     def draw(self):
         
-        '''Redraw the board, possibly in response to window being resized'''
+        '''Draw the board'''
         print "Drawing board"
 
         self.canvas.delete("square")
